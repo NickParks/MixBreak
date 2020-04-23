@@ -1,0 +1,18 @@
+{
+  "name": "mixbreak",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "buld": "pkg index.js --output MixBreak.exe"
+  },
+  "keywords": [],
+  "author": "Nick Parks <nickparksdev@gmail.com> (http://nickparks.me/)",
+  "license": "ISC",
+  "dependencies": {
+    "@mixer/shortcode-oauth": "^1.2.0",
+    "opn": "^6.0.0",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.5"
+  }
+}
