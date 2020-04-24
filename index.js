@@ -151,8 +151,8 @@ function runFirstStart() {
             console.log("You entered an invalid number, so we're defaulting it to 1 hour!");
             config.cycle_time = 60;
         } else {
-            if (config.cycle_time > 15) {
-                cycle_time = 15;
+            if (answer < 15) {
+                config.cycle_time = 15;
                 console.log("Mixer only allows one ad every 15 minutes. Defaulting to 15.");
             }
         }
