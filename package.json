@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "buld": "pkg index.js --output MixBreak.exe"
+    "build": "pkg index.js --output MixBreak.exe"
   },
   "keywords": [],
   "author": "Nick Parks <nickparksdev@gmail.com> (http://nickparks.me/)",
