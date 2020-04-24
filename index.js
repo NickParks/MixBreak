@@ -4,6 +4,7 @@ const { ShortCodeExpireError, OAuthClient } = require('@mixer/shortcode-oauth');
 const rp = require('request-promise');
 const fs = require('fs');
 const opn = require('opn');
+const uuid = require('uuid').v4;
 
 const readline = require('readline');
 const rl = readline.createInterface({
@@ -24,6 +25,8 @@ var config = {
     cycle_time: 60 //Default to 60 until read into config
 };
 
+var currentChannelId;
+
 //Our main function
 async function start() {
     const getCurrentUser = await rp('https://mixer.com/api/v1/users/current', {
@@ -33,8 +36,6 @@ async function start() {
         json: true
     });
 
-    currentUserId = getCurrentUser.id;
-    currentChannelName = getCurrentUser.channel.token;
     currentChannelId = getCurrentUser.channel.id;
 
     setInterval(() => {
@@ -44,20 +45,27 @@ async function start() {
     setInterval(() => {
         getNewTokensFromRefresh(false);
     }, 1000 * 60 * 60 * 5); //Expiry time for token
+
+    runAd(); //Run ad on start for testing
 }
 
 //Sends the post request to play an ad
 function runAd() {
-    rp.post(`https://mixer.com/api/v2/ads/cahnnels/${currentChannelId}`, {
+    rp.post(`https://mixer.com/api/v2/ads/channels/${currentChannelId}`, {
         headers: {
             'User-Agent': 'MixBreak',
             'Authorization': 'Bearer ' + token
         },
+        body: {
+            "requestId": uuid()
+        },
         json: true
     }).then((result) => {
-        console.log(result);
+        console.log("Result: ", result);
     }).catch((err) => {
-        console.error(err);
+        let errorCode = err.error.errorCode;
+        let errorMessage = err.error.errorMessage;
+        console.log(`${errorCode} - ${errorMessage}`);
     });
 }
 
@@ -208,18 +216,18 @@ if (!fs.existsSync('./data/config.json')) {
     }
 }
 
-//Version checker
-rp('https://api.github.com/repos/NickParks/MixBreak/releases/latest', {
-    headers: {
-        'User-Agent': "MixBreak"
-    },
-    json: true
-}).then((value) => {
-    if (value.tag_name != CURRENT_VERSION_TAG) {
-        console.log('\x1b[36m%s\x1b[0m', "There is a new version available for download!");
-        console.log('\x1b[36m%s\x1b[0m', value.url);
-    }
-}).catch(err => {
-    //Error getting github
-    console.log("Failed to check for updates");
-});
+//Version checker - Disabled while testing
+// rp('https://api.github.com/repos/NickParks/MixBreak/releases/latest', {
+//     headers: {
+//         'User-Agent': "MixBreak"
+//     },
+//     json: true
+// }).then((value) => {
+//     if (value.tag_name != CURRENT_VERSION_TAG) {
+//         console.log('\x1b[36m%s\x1b[0m', "There is a new version available for download!");
+//         console.log('\x1b[36m%s\x1b[0m', value.url);
+//     }
+// }).catch(err => {
+//     //Error getting github
+//     console.log("Failed to check for updates");
+// });

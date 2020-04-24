@@ -13,6 +13,7 @@
     "@mixer/shortcode-oauth": "^1.2.0",
     "opn": "^6.0.0",
     "request": "^2.88.2",
-    "request-promise": "^4.2.5"
+    "request-promise": "^4.2.5",
+    "uuid": "^7.0.3"
   }
 }
