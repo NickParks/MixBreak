@@ -3,3 +3,4 @@ authTokens.json
 MixBreak.exe
 package-lock.json
 data/
+.history/
