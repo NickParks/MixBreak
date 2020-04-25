@@ -40,6 +40,13 @@ async function start() {
     let data = JSON.parse(fs.readFileSync("./data/config.json").toString());
     config.cycle_time = data.cycle_time;
 
+    console.clear();
+    console.log("\x1b[32m", "=================================================================");
+    console.log("\x1b[37m", "                  MixBreak is ready to go!");
+    console.log("\x1b[37m", "          ADs will start running every " + config.cycle_time + " minutes!")
+    console.log("\x1b[32m", "=================================================================");
+    console.log();
+
     setInterval(() => {
         runAd();
     }, 1000 * 60 * config.cycle_time); //Cycle time in minutes
@@ -72,17 +79,24 @@ function runAd() {
 
 //Ran when no config is found
 function runFirstStart() {
-    console.log("Welcome to MixBreak! Automagically running ADs for you on Mixer!");
-    console.log("Please answer the following for your configuration: ");
+    console.log("\x1b[36m", "=================================================================");
+    console.log();
+    console.log("\x1b[37m", "                     Welcome to MixBreak!");
+    console.log("\x1b[37m", "           Automagically running ADs for you on Mixer!");
+    console.log();
+    console.log("\x1b[36m", "=================================================================");
+    console.log();
+    console.log("\x1b[33m");
+    console.log("Please answer the following for your configuration: ", "\x1b[37m");
 
-    rl.question("How often do you want to run an ad (in minutes)?", function (answer) {
+    rl.question("How often do you want to run an ad (in minutes)? >>> ", function (answer) {
         if (isNaN(answer)) {
-            console.log("You entered an invalid number, so we're defaulting it to 1 hour!");
+            console.log("\x1b[31m", "You entered an invalid number, so we're defaulting it to 1 hour!");
             config.cycle_time = 60;
         } else {
             if (answer < 15) {
                 config.cycle_time = 15;
-                console.log("Mixer only allows one ad every 15 minutes. Defaulting to 15.");
+                console.log("\x1b[31m", "Mixer only allows one ad every 15 minutes. Defaulting to 15.");
             } else {
                 config.cycle_time = answer;
             }
@@ -98,8 +112,14 @@ function runFirstStart() {
         if (config.cycle_time == undefined) {
             process.exit(0);
         }
-
-        console.log("Booting up MixBreak now!");
+        
+        console.clear();
+        console.log("\x1b[36m", "=================================================================");
+        console.log();
+        console.log("\x1b[37m", "                  Booting up MixBreak now!");
+        console.log();
+        console.log("\x1b[36m", "=================================================================");
+        console.log();
 
         //Get auth now that we've setup the config
         startAttempts();
@@ -117,10 +137,16 @@ function startAttempts() {
         //Write our new tokens to file
         fs.writeFile("./data/authTokens.json", JSON.stringify(tokens.data), (err) => {
             if (err) {
-                console.error("Failed to write new tokens to file..");
+                console.error("\x1b[31m", "Failed to write new tokens to file..");
+                console.log()
             }
 
-            console.log("MixBreak is ready to go! ADs will start running every " + config.cycle_time + " minutes!");
+            console.clear();
+            console.log("\x1b[32m", "=================================================================");
+            console.log("\x1b[37m", "                  MixBreak is ready to go!");
+            console.log("\x1b[37m", "          ADs will start running every " + config.cycle_time + " minutes!")
+            console.log("\x1b[32m", "=================================================================");
+            console.log();
 
             start();
         });
@@ -132,7 +158,8 @@ const attempt = () =>
     oAuthClient
         .getCode()
         .then(code => {
-            console.log("Please accept the authentication window that should be open in your browser");
+            console.log("\x1b[33m", "Please accept the authentication window that should be open in your browser");
+            console.log();
             opn(`https://mixer.com/go?code=${code.code}`);
             return code.waitForAccept();
         })
@@ -168,7 +195,7 @@ function getNewTokensFromRefresh(startAfter) {
         //Write our new tokens to file
         fs.writeFile("./data/authTokens.json", JSON.stringify(tokensToWrite), (err) => {
             if (err) {
-                console.error("Failed to write new tokens to file..");
+                console.error("\x1b[31m", "Failed to write new tokens to file..");
             }
 
             //If we are refreshing on load we can start
@@ -177,7 +204,7 @@ function getNewTokensFromRefresh(startAfter) {
             }
         });
     }).catch(err => {
-        console.log("Failed to get new tokens");
+        console.log("\x1b[31m", "Failed to get new tokens");
     });
 }
 
@@ -194,7 +221,7 @@ rp('https://api.github.com/repos/NickParks/MixBreak/releases/latest', {
     }
 }).catch(err => {
     //Error getting github
-    console.log("Failed to check for updates");
+    console.log("\x1b[31m", "Failed to check for updates");
 });
 
 
@@ -212,7 +239,7 @@ if (!fs.existsSync('./data/config.json')) {
         //No auth found
         fs.writeFile("./data/authTokens.json", JSON.stringify({}), (err) => {
             if (err) {
-                console.error("Could not write data to file to save auth tokens...");
+                console.error("\x1b[31m", "Could not write data to file to save auth tokens...");
             }
 
             startAttempts();
@@ -221,7 +248,7 @@ if (!fs.existsSync('./data/config.json')) {
         //Exists so try to read it
         fs.readFile("./data/authTokens.json", (error, data) => {
             if (error) {
-                console.error("Error reading file, please re-auth");
+                console.error("\x1b[31m", "Error reading file, please re-auth");
                 startAttempts();
                 return;
             }
