@@ -1,4 +1,4 @@
-const CURRENT_VERSION_TAG = "1.0";
+const CURRENT_VERSION_TAG = "1.1";
 
 //Setup our imports and variables
 const { ShortCodeExpireError, OAuthClient } = require('@mixer/shortcode-oauth');
