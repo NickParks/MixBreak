@@ -112,7 +112,7 @@ function runFirstStart() {
         if (config.cycle_time == undefined) {
             process.exit(0);
         }
-        
+
         console.clear();
         console.log("\x1b[36m", "=================================================================");
         console.log();
@@ -217,7 +217,7 @@ rp('https://api.github.com/repos/NickParks/MixBreak/releases/latest', {
 }).then((value) => {
     if (value.tag_name != CURRENT_VERSION_TAG) {
         console.log('\x1b[36m%s\x1b[0m', "There is a new version available for download!");
-        console.log('\x1b[36m%s\x1b[0m', value.url);
+        console.log('\x1b[36m%s\x1b[0m', value.html_url);
     }
 }).catch(err => {
     //Error getting github
