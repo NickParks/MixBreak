@@ -24,6 +24,7 @@ var currentChannelId;
 
 //Config values
 var config = {};
+var setupError = null;
 
 //Our main function
 async function start() {
@@ -89,14 +90,16 @@ function runFirstStart() {
     console.log("\x1b[33m");
     console.log("Please answer the following for your configuration: ", "\x1b[37m");
 
+
+
     rl.question("How often do you want to run an ad (in minutes)? >>> ", function (answer) {
         if (isNaN(answer)) {
-            console.log("\x1b[31m", "You entered an invalid number, so we're defaulting it to 1 hour!");
+            setupError = "You entered an invalid number, so we're defaulting it to 1 hour!";
             config.cycle_time = 60;
         } else {
             if (answer < 15) {
+                setupError = "Mixer only allows one ad every 15 minutes. Defaulting to 15.";
                 config.cycle_time = 15;
-                console.log("\x1b[31m", "Mixer only allows one ad every 15 minutes. Defaulting to 15.");
             } else {
                 config.cycle_time = answer;
             }
@@ -104,7 +107,16 @@ function runFirstStart() {
 
         fs.writeFileSync('./data/config.json', JSON.stringify(config));
 
-        rl.close();
+        if ( setupError ) {
+            console.log("\x1b[31m", setupError);
+            console.log("\x1b[37m");
+            rl.question("Press any key to continue...", function() {
+                rl.close();
+            })
+        } else {
+            rl.close();
+        }
+
     });
 
     rl.on("close", function () {
