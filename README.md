@@ -4,7 +4,7 @@ MixBreak is a basic program that allows you to automate the playing of ADs durin
 
 ## Installation
 
-Head over to the [Releases Tab](https://github.com/NickParks/MixBreak/releases) and download the latest version!
+Head over to the [Releases Tab](https://github.com/NickParks/MixBreak/releases) and download the latest `MixBreak.exe` version!
 
 ## Usage
 When you first open the program, it will run a "first run" setup where you enter how often you want to run ads. Please note Mixer has a hard set rule that one AD can only be run every 15 minutes. We will automatically set this if you choose a value below that.
