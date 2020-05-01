@@ -1,4 +1,4 @@
-const CURRENT_VERSION_TAG = "1.1";
+const CURRENT_VERSION_TAG = "1.2";
 
 //Setup our imports and variables
 const { ShortCodeExpireError, OAuthClient } = require('@mixer/shortcode-oauth');
@@ -107,10 +107,10 @@ function runFirstStart() {
 
         fs.writeFileSync('./data/config.json', JSON.stringify(config));
 
-        if ( setupError ) {
+        if (setupError) {
             console.log("\x1b[31m", setupError);
             console.log("\x1b[37m");
-            rl.question("Press any key to continue...", function() {
+            rl.question("Press any key to continue...", function () {
                 rl.close();
             })
         } else {
